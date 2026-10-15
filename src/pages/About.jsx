@@ -119,8 +119,9 @@ export default function About() {
             ))}
           </ol>
 
-          <SectionLabel num="04" className="mb-8 mt-[clamp(72px,10vw,140px)]">The process</SectionLabel>
-          <ProcessCards dark />
+          <div className="mt-[clamp(72px,10vw,140px)]">
+            <ProcessCards dark intro={<SectionLabel num="04" className="sm:mb-8">The process</SectionLabel>} />
+          </div>
         </div>
       </section>
 

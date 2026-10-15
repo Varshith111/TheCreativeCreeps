@@ -139,13 +139,17 @@ export default function Services() {
       {/* Process */}
       <section aria-labelledby="process-title" className="rounded-t-[clamp(24px,4vw,48px)] bg-ink py-[clamp(80px,12vw,160px)] text-cream [--focus:var(--color-lime)]">
         <div className="wrap">
-          <div className="mb-[clamp(40px,6vw,72px)] flex flex-wrap items-end justify-between gap-8">
-            <SectionTitle num="01" eyebrow="How we work" id="process-title">
-              The <span className="hl-flat">process</span>
-            </SectionTitle>
-            <p className="max-w-[38ch] text-lg text-cream/60">Every project, big or small, moves through the same four phases. No black boxes, no big reveal surprises.</p>
-          </div>
-          <ProcessCards dark />
+          <ProcessCards
+            dark
+            intro={
+              <div className="mb-[clamp(0px,6vw,72px)] flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+                <SectionTitle num="01" eyebrow="How we work" id="process-title">
+                  The <span className="hl-flat">process</span>
+                </SectionTitle>
+                <p className="max-w-[38ch] text-cream/60 sm:text-lg">Every project, big or small, moves through the same four phases. No black boxes, no big reveal surprises.</p>
+              </div>
+            }
+          />
         </div>
       </section>
 

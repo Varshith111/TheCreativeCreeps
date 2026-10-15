@@ -1,9 +1,10 @@
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router";
 import { LazyMotion, MotionConfig, domMax } from "motion/react";
 import Header from "./Header";
 import Footer from "./Footer";
 import Cursor from "./Cursor";
+import Intro, { shouldSkipIntro } from "./Intro";
 import { LogoDefs } from "./Logo";
 import { useCreepyEyes } from "../hooks/useCreepyEyes";
 
@@ -35,6 +36,11 @@ export default function Layout() {
   useCreepyEyes();
   useScrollOnNavigate();
 
+  // opening sequence: page content mounts when the intro starts revealing it,
+  // so the hero's own entrance animation plays as the overlay wipes away
+  const [introActive, setIntroActive] = useState(() => !shouldSkipIntro());
+  const [revealed, setRevealed] = useState(() => !introActive);
+
   useEffect(() => {
     const raf = requestAnimationFrame(() => document.documentElement.classList.add("is-loaded"));
     return () => cancelAnimationFrame(raf);
@@ -53,10 +59,11 @@ export default function Layout() {
         <LogoDefs />
         <Header />
         <main id="main" tabIndex={-1} className="outline-none">
-          <Outlet />
+          {revealed ? <Outlet /> : <div className="min-h-svh" />}
         </main>
         <Footer />
         <Cursor />
+        {introActive && <Intro onReveal={() => setRevealed(true)} onDone={() => setIntroActive(false)} />}
       </MotionConfig>
     </LazyMotion>
   );
