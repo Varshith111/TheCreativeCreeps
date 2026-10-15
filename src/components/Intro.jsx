@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, m } from "motion/react";
 import { EASE } from "./ui";
+import { Eye } from "./Logo";
+import { CS, T, T_BOX } from "./logoGeometry";
 
 /*
  * Opening sequence: the TCC monogram breaks apart and grows into "THE CREATIVE CREEPS".
@@ -24,32 +26,36 @@ export function shouldSkipIntro() {
   return window.location.pathname !== "/";
 }
 
-const T_PATH =
-  "M122,468 L496,370 Q510,367 509,381 L504,520 L396,540 L403,842 Q404,856 390,853 L242,820 Q232,817 232,806 L232,574 L128,597 Q113,600 113,586 L113,482 Q113,470 122,468 Z";
+// Glyph frames: the traced letter boxes plus a little padding, all at the same scale
+// (one C is 1em tall), so the opening cluster reproduces the real monogram exactly.
+const PAD = 4;
+const frame = ([x0, y0, x1, y1]) => [x0 - PAD, y0 - PAD, x1 - x0 + PAD * 2, y1 - y0 + PAD * 2];
+const C_HEIGHT = frame(CS[0].box)[3];
 
 /** The logo's T on its own. */
 function GlyphT() {
+  const vb = frame(T_BOX);
   return (
-    <svg viewBox="108 362 406 498" className="tcc block h-[1.06em] w-auto overflow-visible" aria-hidden="true">
-      <path className="tcc-ink" d={T_PATH} />
+    <svg viewBox={vb.join(" ")} style={{ height: `${vb[3] / C_HEIGHT}em` }} className="tcc block w-auto overflow-visible" aria-hidden="true">
+      <path className="tcc-ink" d={T} />
     </svg>
   );
 }
 
-/** The logo's C, mouth cut out, with its creepy eye (tracked + blinking via useCreepyEyes). */
-function GlyphC() {
+/** One of the logo's C's, with its creepy eye (tracked + blinking via useCreepyEyes). */
+function GlyphC({ index }) {
+  const c = CS[index];
+  const vb = frame(c.box);
   return (
-    <svg viewBox="400 436 390 436" className="tcc block h-[1em] w-auto overflow-visible" aria-hidden="true">
-      <ellipse className="tcc-ink tcc-gap" clipPath="url(#tcc-c1)" cx="594" cy="654" rx="186" ry="211" />
-      <circle className="tcc-white tcc-socket" cx="625" cy="652" r="78" />
-      <g className="tcc-eye">
-        <ellipse className="tcc-lime" cx="688" cy="658" rx="36" ry="58" />
-        <ellipse cx="703" cy="658" rx="30" ry="57" fill="var(--color-ink)" />
-        <ellipse className="tcc-white" cx="716" cy="640" rx="7" ry="12" />
-      </g>
+    <svg viewBox={vb.join(" ")} style={{ height: `${vb[3] / C_HEIGHT}em` }} className="tcc block w-auto overflow-visible" aria-hidden="true">
+      <path className="tcc-ink" d={c.ring} />
+      <Eye c={c} />
     </svg>
   );
 }
+
+const GlyphC1 = () => <GlyphC index={0} />;
+const GlyphC2 = () => <GlyphC index={1} />;
 
 /** Letters that stream out of a glyph: the container grows from 0 width while each letter un-blurs. */
 function Suffix({ text, show, delay, align }) {
@@ -105,12 +111,16 @@ function Burst({ show, side }) {
 
 const WORDS = [
   { glyph: GlyphT, rest: "he", align: "self-end mb-[.06em]" },
-  { glyph: GlyphC, rest: "reative", align: "self-center" },
-  { glyph: GlyphC, rest: "reeps", align: "self-center" },
+  { glyph: GlyphC1, rest: "reative", align: "self-center" },
+  { glyph: GlyphC2, rest: "reeps", align: "self-center" },
 ];
 
 // space before each word: overlapping like the monogram at first, then a normal word gap
-const GAP_LOGO = ["0em", "-.24em", "-.1em"];
+// how far each glyph overlaps the previous one in the real monogram (negative margin, in em)
+const right = (box) => frame(box)[0] + frame(box)[2];
+const GAP_LOGO = ["0em", `${-(right(T_BOX) - frame(CS[0].box)[0]) / C_HEIGHT}em`, `${-(right(CS[0].box) - frame(CS[1].box)[0]) / C_HEIGHT}em`];
+// the T sits slightly higher than the C's in the monogram
+const T_LIFT = `${(frame(CS[0].box)[1] + C_HEIGHT - (frame(T_BOX)[1] + frame(T_BOX)[3])) / C_HEIGHT}em`;
 const GAP_WORD = "0.22em";
 
 export default function Intro({ onReveal, onDone }) {
@@ -181,7 +191,7 @@ export default function Intro({ onReveal, onDone }) {
             transition={{ duration: EXIT_MS / 1000, ease: [0.76, 0, 0.24, 1] }}
           >
             <m.div
-              className="relative flex items-center text-[clamp(28px,8.8vw,136px)]"
+              className="relative flex items-end text-[clamp(28px,8.8vw,136px)]"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: settled ? [1.035, 1] : 1 }}
               transition={settled ? { duration: 0.5, ease: EASE } : { duration: 0.35, ease: EASE }}
@@ -191,7 +201,7 @@ export default function Intro({ onReveal, onDone }) {
                 <m.span
                   key={i}
                   className="relative flex"
-                  style={{ zIndex: i + 1 }}
+                  style={{ zIndex: i + 1, marginBottom: i === 0 ? T_LIFT : 0 }}
                   initial={{ marginLeft: GAP_LOGO[i] }}
                   animate={{
                     marginLeft: i === 0 ? "0em" : separated ? GAP_WORD : GAP_LOGO[i],

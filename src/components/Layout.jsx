@@ -5,7 +5,6 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Cursor from "./Cursor";
 import Intro, { shouldSkipIntro } from "./Intro";
-import { LogoDefs } from "./Logo";
 import { useCreepyEyes } from "../hooks/useCreepyEyes";
 
 /**
@@ -56,7 +55,6 @@ export default function Layout() {
         >
           Skip to content
         </a>
-        <LogoDefs />
         <Header />
         <main id="main" tabIndex={-1} className="outline-none">
           {revealed ? <Outlet /> : <div className="min-h-svh" />}

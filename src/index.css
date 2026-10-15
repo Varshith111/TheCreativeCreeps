@@ -105,7 +105,6 @@
   .tcc .tcc-ink { fill: var(--logo-ink, var(--color-ink)); }
   .tcc .tcc-white { fill: #fff; }
   .tcc .tcc-lime { fill: var(--color-lime); }
-  .tcc .tcc-gap { stroke: var(--logo-bg, var(--color-cream)); stroke-width: 18; paint-order: stroke; }
   .tcc .tcc-eye { transform-box: fill-box; transform-origin: center; transition: transform .25s var(--ease-creep); }
   .tcc .tcc-eye.is-blinking { transform: scaleY(.08) !important; transition-duration: .09s; }
 
