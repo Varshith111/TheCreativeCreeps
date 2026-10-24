@@ -11,12 +11,15 @@ import { CS, T } from "./logoGeometry";
 const VIEWBOX_FLAT = "100 352 1040 520";
 const VIEWBOX_SCULPT = "90 340 1110 590";
 
-/** One C's eye: white socket, then the pupil group (lime crescent, pupil, highlight) that moves. */
-export function Eye({ c }) {
+/**
+ * One C's eye: the socket, then the pupil group (lime crescent, pupil, highlight) that moves.
+ * `bare` leaves the socket unfilled (no white eye background) — it still anchors eye tracking.
+ */
+export function Eye({ c, bare = false }) {
   const { socket, lime, pupil: p, highlight: h } = c;
   return (
     <g>
-      <path className="tcc-white tcc-socket" d={socket} />
+      <path className={bare ? "tcc-socket" : "tcc-white tcc-socket"} d={socket} fill={bare ? "none" : undefined} />
       <g className="tcc-eye">
         <path className="tcc-lime" d={lime} />
         <ellipse cx={p.cx} cy={p.cy} rx={p.rx} ry={p.ry} transform={`rotate(${p.rotate} ${p.cx} ${p.cy})`} fill="var(--color-ink)" />
@@ -69,13 +72,10 @@ export default function Logo({ className = "", title, depth = 0 }) {
         <g transform="translate(-5 -6)" fill="var(--color-lime)">
           <Letters />
         </g>
-        {/* face */}
-        {CS.map((c, i) => (
-          <path key={i} className="tcc-white" d={c.socket} />
-        ))}
+        {/* face — eyes without the white socket background */}
         <Letters className="tcc-ink" />
         {CS.map((c, i) => (
-          <Eye key={i} c={c} />
+          <Eye key={i} c={c} bare />
         ))}
       </svg>
     );

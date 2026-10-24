@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import Hero from "../components/Hero";
+import CrossTape from "../components/CrossTape";
 import Philosophy from "../components/Philosophy";
 import ProcessCards from "../components/ProcessCards";
 import ServiceRows from "../components/ServiceRows";
@@ -26,20 +27,21 @@ export default function Home() {
     <>
       <title>The Creative Creeps — Ideas That Creep Differently</title>
       <Hero />
+      <CrossTape />
       <Philosophy />
 
       {/* Process */}
-      <section aria-labelledby="process-title" className="pb-[clamp(88px,13vw,180px)]">
+      <section aria-labelledby="process-title" className="pb-10 sm:pb-16 lg:pb-[clamp(88px,13vw,180px)]">
         <div className="wrap">
           <ProcessCards
             intro={
               <>
                 <SectionLabel num="02">Process</SectionLabel>
-                <div className="mb-[clamp(0px,5vw,64px)] mt-[clamp(28px,4vw,56px)] flex flex-wrap items-end justify-between gap-6">
-                  <Reveal as="h2" id="process-title" className="font-display text-[clamp(2.6rem,6.5vw,6rem)] font-black uppercase leading-[.88] tracking-[-.045em]">
+                <div className="mb-6 sm:mb-[clamp(0px,5vw,64px)] mt-4 sm:mt-[clamp(28px,4vw,56px)] flex flex-wrap items-end justify-between gap-3 sm:gap-6">
+                  <Reveal as="h2" id="process-title" className="font-display text-[clamp(2.2rem,6.5vw,6rem)] font-black uppercase leading-[.88] tracking-[-.045em]">
                     How we <span className="font-extralight [font-stretch:110%]">creep</span>
                   </Reveal>
-                  <p className="label max-w-[32ch] text-muted">Four phases. Every project, big or small. No black boxes, no surprise reveals.</p>
+                  <p className="label max-w-[32ch] text-xs sm:text-sm text-muted">Four phases. Every project, big or small. No black boxes, no surprise reveals.</p>
                 </div>
               </>
             }
@@ -48,7 +50,7 @@ export default function Home() {
       </section>
 
       {/* Services */}
-      <section aria-labelledby="services-title" className="bg-ink py-[clamp(88px,13vw,180px)] text-cream [--focus:var(--color-lime)] max-lg:py-[clamp(48px,8vw,88px)]">
+      <section aria-labelledby="services-title" className="bg-ink py-10 sm:py-16 lg:py-[clamp(88px,13vw,180px)] text-cream [--focus:var(--color-lime)]">
         <ServiceRows
           heading={
             <div>

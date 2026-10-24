@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { AnimatePresence, m } from "motion/react";
 import { Arrow, EASE } from "./ui";
-import { BUDGETS, EMAIL, SERVICES } from "../data";
+import { BUDGETS, CONTACT_INBOX, SERVICES } from "../data";
 
 /*
- * Submission: set VITE_FORM_ENDPOINT (e.g. a Formspree / Basin / Getform URL, or your own API)
- * to POST the enquiry as JSON. Without it, the form falls back to opening the visitor's email
- * app with the message pre-filled — so it always works, even before a backend exists.
+ * Submission: enquiries are emailed to CONTACT_INBOX (data.js) through FormSubmit
+ * (https://formsubmit.co) — no backend or API key needed. The very first submission sends an
+ * activation email to that inbox; click its link once and every later message is delivered.
+ * To use your own API or another form service instead, set VITE_FORM_ENDPOINT.
  */
-const ENDPOINT = import.meta.env.VITE_FORM_ENDPOINT;
+const ENDPOINT = import.meta.env.VITE_FORM_ENDPOINT || `https://formsubmit.co/ajax/${CONTACT_INBOX}`;
 
 const RULES = {
   name: (v) => v.trim().length >= 2 || "Please tell us your name.",
@@ -20,25 +21,25 @@ const RULES = {
 const EMPTY = { name: "", email: "", service: "", budget: "", message: "" };
 
 async function send(values) {
-  if (ENDPOINT) {
-    const res = await fetch(ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify(values),
-    });
-    if (!res.ok) throw new Error(`Form endpoint responded ${res.status}`);
-    return "sent";
-  }
-  const body = [
-    `Name: ${values.name}`,
-    `Email: ${values.email}`,
-    `Service: ${values.service}`,
-    `Budget: ${values.budget || "—"}`,
-    "",
-    values.message,
-  ].join("\n");
-  window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(`New project enquiry — ${values.name}`)}&body=${encodeURIComponent(body)}`;
-  return "mailto";
+  const res = await fetch(ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({
+      name: values.name,
+      email: values.email,
+      service: values.service,
+      budget: values.budget || "Not specified",
+      message: values.message,
+      // FormSubmit options: subject line, reply goes to the visitor, tidy table layout, no captcha page
+      _subject: `New project enquiry — ${values.name}`,
+      _replyto: values.email,
+      _template: "table",
+      _captcha: "false",
+    }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || String(data.success) === "false") throw new Error(data.message || `Form endpoint responded ${res.status}`);
+  return "sent";
 }
 
 const fieldCls =
@@ -65,7 +66,7 @@ function Field({ id, label, hint, error, children }) {
   );
 }
 
-function Success({ mode, onReset }) {
+function Success({ onReset }) {
   return (
     <m.div
       key="success"
@@ -93,21 +94,9 @@ function Success({ mode, onReset }) {
         />
       </svg>
       <h3 className="mt-6 font-display text-[clamp(2rem,3.4vw,3rem)] font-black uppercase leading-[.95] tracking-[-.04em]">
-        {mode === "sent" ? "Message received." : "Almost there."}
+        Message received.
       </h3>
-      <p className="mt-4 max-w-[40ch] text-lg text-ink-2">
-        {mode === "sent" ? (
-          "Thanks for reaching out — we’ll creep into your inbox within two working days."
-        ) : (
-          <>
-            Your email app should open with the message ready to send. If it didn’t, write to us at{" "}
-            <a href={`mailto:${EMAIL}`} className="link-underline">
-              {EMAIL}
-            </a>
-            .
-          </>
-        )}
-      </p>
+      <p className="mt-4 max-w-[40ch] text-lg text-ink-2">Thanks for reaching out — we’ll creep into your inbox within two working days.</p>
       <button type="button" onClick={onReset} className="link-underline mt-8 w-fit cursor-pointer">
         Send another enquiry
       </button>
@@ -118,7 +107,7 @@ function Success({ mode, onReset }) {
 export default function ContactForm({ className = "" }) {
   const [values, setValues] = useState(EMPTY);
   const [errors, setErrors] = useState({});
-  const [status, setStatus] = useState("idle"); // idle | sending | sent | mailto | error
+  const [status, setStatus] = useState("idle"); // idle | sending | sent | error
 
   const check = (name, value = values[name]) => {
     const result = RULES[name]?.(value) ?? true;
@@ -163,13 +152,13 @@ export default function ContactForm({ className = "" }) {
     "aria-describedby": errors[name] ? `f-${name}-err` : undefined,
   });
 
-  const done = status === "sent" || status === "mailto";
+  const done = status === "sent";
 
   return (
     <div className={`rounded-[18px] border-2 border-ink bg-cream p-[clamp(22px,3.4vw,44px)] shadow-[10px_12px_0_var(--color-ink)] ${className}`}>
       <AnimatePresence mode="wait" initial={false}>
         {done ? (
-          <Success key="success" mode={status} onReset={() => setStatus("idle")} />
+          <Success key="success" onReset={() => setStatus("idle")} />
         ) : (
           <m.form key="form" noValidate onSubmit={onSubmit} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.3 }} className="grid gap-7" aria-describedby="form-note">
             <div className="flex items-center justify-between gap-4">
@@ -219,8 +208,8 @@ export default function ContactForm({ className = "" }) {
             {status === "error" && (
               <p role="alert" className="rounded-lg border-2 border-danger bg-danger/5 px-4 py-3 text-sm font-medium text-danger">
                 Something went wrong sending your message. Please try again, or email us at{" "}
-                <a href={`mailto:${EMAIL}`} className="underline">
-                  {EMAIL}
+                <a href={`mailto:${CONTACT_INBOX}`} className="underline">
+                  {CONTACT_INBOX}
                 </a>
                 .
               </p>

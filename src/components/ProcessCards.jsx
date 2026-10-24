@@ -57,14 +57,12 @@ function CardBody({ step, i, dark, compact = false, className = "", style }) {
   return (
     <m.div
       style={style}
-      className={`relative flex flex-col overflow-hidden rounded-[18px] border p-6 transition-[background-color,color,translate,rotate,box-shadow] duration-500 ease-creep sm:p-7 ${
-        compact ? "h-full" : "min-h-[380px] hover:-translate-y-2 hover:-rotate-[1.2deg]"
-      } ${
-        dark
+      className={`relative flex flex-col overflow-hidden rounded-[18px] border p-6 transition-[background-color,color,translate,rotate,box-shadow] duration-500 ease-creep sm:p-7 ${compact ? "h-full" : "min-h-[380px] hover:-translate-y-2 hover:-rotate-[1.2deg]"
+        } ${dark
           ? // solid fill on phones so stacked cards don't show through each other
-            `border-cream/15 text-cream hover:bg-lime hover:text-ink ${compact ? "bg-[#1a1a18]" : "bg-cream/[.03]"}`
+          `border-cream/15 text-cream hover:bg-lime hover:text-ink ${compact ? "bg-[#1a1a18]" : "bg-cream/[.03]"}`
           : "border-ink/15 bg-paper text-ink hover:bg-ink hover:text-cream hover:shadow-[10px_12px_0_var(--color-lime)]"
-      } ${className}`}
+        } ${className}`}
     >
       <div className="flex items-start justify-between">
         <span className="font-display text-[3.4rem] font-black leading-none tracking-[-.05em] opacity-15 transition-opacity duration-500 group-hover:opacity-100">
@@ -76,9 +74,8 @@ function CardBody({ step, i, dark, compact = false, className = "", style }) {
       <svg
         viewBox="0 0 120 120"
         aria-hidden="true"
-        className={`mx-auto transition-transform duration-700 ease-creep group-hover:-rotate-6 group-hover:scale-110 [&_.fill-accent]:transition-colors [&_.fill-accent]:duration-500 ${
-          compact ? "my-3 h-[clamp(64px,13svh,120px)] w-auto shrink-0" : "my-6 w-[46%]"
-        } ${dark ? "[&_.fill-accent]:fill-lime group-hover:[&_.fill-accent]:fill-cream" : "[&_.fill-accent]:fill-lime"}`}
+        className={`mx-auto transition-transform duration-700 ease-creep group-hover:-rotate-6 group-hover:scale-110 [&_.fill-accent]:transition-colors [&_.fill-accent]:duration-500 ${compact ? "my-3 h-[clamp(64px,13svh,120px)] w-auto shrink-0" : "my-6 w-[46%]"
+          } ${dark ? "[&_.fill-accent]:fill-lime group-hover:[&_.fill-accent]:fill-cream" : "[&_.fill-accent]:fill-lime"}`}
       >
         {GLYPHS[glyph]}
       </svg>

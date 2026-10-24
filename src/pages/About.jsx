@@ -61,12 +61,12 @@ export default function About() {
               <span className="hl-outline">spare room</span>
             </SectionTitle>
             <p>
-              The Creative Creeps started as two friends, one borrowed laptop and an unhealthy obsession with odd ideas. People kept
-              asking for “something different” — so we made <span className="underline-mark">different</span> our whole thing.
+              The Creative Creeps started in 2026 as three friends with an unhealthy obsession with odd ideas. Everyone kept asking
+              for “something different” — so we made <span className="underline-mark">different</span> our whole thing.
             </p>
             <p>
-              Today we’re a small, tight-knit studio partnering with startups, cultural brands and the occasional brave enterprise. We
-              stay small on purpose: the people you meet on the first call are the people who do the work.
+              Today we’re a small, tight-knit studio for startups, cultural brands and anyone brave enough to stand out. We stay small
+              on purpose: the people you meet on the first call are the people who do the work.
             </p>
           </Reveal>
 
@@ -134,19 +134,17 @@ export default function About() {
               <br />
               <span className="hl">creeps</span>
             </SectionTitle>
-            <div className="grid max-w-[36ch] gap-3">
-              <p className="text-lg text-muted">Small team, big opinions. Move your cursor — they’re paying attention.</p>
-              <p className="label w-fit rounded-md border border-dashed border-ink/40 px-3 py-2 text-muted">Placeholder — names & portraits to be added</p>
-            </div>
+            <p className="max-w-[36ch] text-lg text-muted">Small team, big opinions. Move your cursor — they’re paying attention.</p>
           </div>
-          <ul className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 lg:grid-cols-4">
-            {TEAM.map(({ role, color }, i) => (
-              <Reveal as="li" key={role} delay={(i % 4) * 0.08} className="group">
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4">
+            {TEAM.map(({ name, role, color }, i) => (
+              <Reveal as="li" key={name} delay={(i % 4) * 0.08} className="group">
                 <div className="aspect-square overflow-hidden rounded-[14px] ring-1 ring-ink/15 transition duration-500 ease-creep group-hover:-translate-y-1.5 group-hover:-rotate-2 group-hover:shadow-[8px_10px_0_var(--color-ink)] [&>svg]:size-full">
                   <Avatar variant={i} color={color} />
                 </div>
-                <h3 className="mt-4 font-display text-[clamp(1.1rem,1.6vw,1.4rem)] font-extrabold tracking-[-.02em]">{role}</h3>
-                <p className="label mt-1 text-muted">TCC—{String(i + 1).padStart(2, "0")}</p>
+                <h3 className="mt-4 font-display text-[clamp(1.3rem,2vw,1.75rem)] font-black uppercase tracking-[-.03em]">{name}</h3>
+                <p className="mt-1 text-[.95rem] text-ink-2">{role}</p>
+                <p className="label mt-2 text-muted">TCC—{String(i + 1).padStart(2, "0")}</p>
               </Reveal>
             ))}
             <Reveal as="li" delay={0.16}>

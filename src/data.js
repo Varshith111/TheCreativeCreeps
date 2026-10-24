@@ -13,6 +13,8 @@ export const NAV = [
 
 // PLACEHOLDER contact details
 export const EMAIL = "hello@thecreativecreeps.com";
+// where contact-form enquiries are delivered
+export const CONTACT_INBOX = "vercel@gmail.com";
 export const ADDRESS = ["Studio address", "City, Country"];
 
 export const TICKER = ["Brand Identity", "Digital Campaigns", "Web Design & Development", "Social Media Management", "Social Content", "Packaging Design"];
@@ -243,13 +245,10 @@ export const TESTIMONIAL = {
 
 /* ---------------- About ---------------- */
 
-// PLACEHOLDER history — confirm dates and milestones.
 export const TIMELINE = [
-  { year: "2017", text: "Two friends, one borrowed laptop. The Creative Creeps is born in a spare bedroom." },
-  { year: "2019", text: "First studio space and first hire." },
-  { year: "2021", text: "Social media management joins the toolkit to grow brands across every feed." },
-  { year: "2023", text: "The studio grows into a small multidisciplinary team." },
-  { year: "Now", text: "Still small on purpose. Still weird on purpose." },
+  { year: "2026", text: "Three friends, one shared obsession with odd ideas. The Creative Creeps is born." },
+  { year: "Now", text: "Taking on our first brand, content, web and video projects — and building a body of work we’re proud of." },
+  { year: "Next", text: "Growing the pack, the portfolio and the weird ideas. Want to be part of it? Say hi." },
 ];
 
 export const VALUES = [
@@ -259,14 +258,10 @@ export const VALUES = [
   { name: "No ego, all in", text: "The best idea wins, whoever had it. We’re a pack, not a collection of lone wolves." },
 ];
 
-// PLACEHOLDER team — add real names and portraits.
 export const TEAM = [
-  { role: "Creative Director", color: "#D4F53C" },
-  { role: "Technical Director", color: "#FF5B2E" },
-  { role: "Strategy Lead", color: "#F7B6CF" },
-  { role: "Design Lead", color: "#3B5BFF" },
-  { role: "Social Media Lead", color: "#F2EDE4" },
-  { role: "Developer", color: "#B7D81F" },
+  { name: "Varshith", role: "Strategy & Creative Lead · Developer", color: "#D4F53C" },
+  { name: "Akshith", role: "Content & Design Lead", color: "#FF5B2E" },
+  { name: "Ritvik", role: "Videographer & Editor", color: "#3B5BFF" },
 ];
 
 /* ---------------- Contact ---------------- */
